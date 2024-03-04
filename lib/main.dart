@@ -1,5 +1,5 @@
 import 'package:ecom/firebase_options.dart';
-import 'package:ecom/splash_screen.dart';
+import 'package:ecom/screens/onboarding/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,8 +11,7 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-    await GetStorage.init();
-
+  await GetStorage.init();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
@@ -30,7 +29,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.green,
       ),
-      home: const SplashScreen(),
+      home: OnboardingScreen(),
     );
   }
 }
