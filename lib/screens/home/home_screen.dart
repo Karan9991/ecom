@@ -4,13 +4,31 @@ import 'package:ecom/screens/home/categories.dart';
 import 'package:ecom/screens/home/products.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stylish_bottom_bar/model/bar_items.dart';
+import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final HomeController controller = Get.put(HomeController());
+  dynamic selected;
+  PageController pageController = PageController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // extendBody: true,
       appBar: AppBar(
         flexibleSpace: Padding(
           padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
@@ -24,7 +42,6 @@ class HomeScreen extends StatelessWidget {
             titlePadding: EdgeInsets.all(0),
           ),
         ),
-    
         actions: [
           IconButton(
             icon: Icon(Icons.search),
@@ -34,48 +51,120 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Banners
-            banner.Banner(),
-
-            // Categories
-
-            CategorySection(),
-            // Products
-
-            Products(),
+      bottomNavigationBar: StylishBottomBar(
+        option: AnimatedBarOptions(
+          // iconSize: 32,
+          barAnimation: BarAnimation.fade,
+          iconStyle: IconStyle.animated,
+          // opacity: 0.3,
+        ),
+        items: [
+          BottomBarItem(
+            icon: const Icon(
+              Icons.house_outlined,
+            ),
+            selectedIcon: const Icon(Icons.house_rounded),
+            // selectedColor: Colors.teal,
+            backgroundColor: Colors.greenAccent,
+            title: const Text('Home'),
+            //badge: const Text('9+'),
+            // showBadge: true,
+          ),
+          BottomBarItem(
+            icon: const Icon(Icons.category),
+            selectedIcon: const Icon(Icons.category),
+            selectedColor: Colors.green,
+            unSelectedColor: Colors.purple,
+            backgroundColor: Colors.orange,
+            title: const Text('Category'),
+          ),
+          BottomBarItem(
+              icon: const Icon(
+                Icons.favorite,
+              ),
+              selectedIcon: const Icon(
+                Icons.favorite,
+              ),
+              backgroundColor: Colors.amber,
+              selectedColor: Colors.deepOrangeAccent,
+              title: const Text('Favourite')),
+          BottomBarItem(
+              icon: const Icon(
+                Icons.person_outline,
+              ),
+              selectedIcon: const Icon(
+                Icons.person,
+              ),
+              backgroundColor: Colors.purpleAccent,
+              selectedColor: Colors.deepPurple,
+              title: const Text('Profile')),
+        ],
+        hasNotch: true,
+        fabLocation: StylishBarFabLocation.center,
+        currentIndex: selected ?? 0,
+        onTap: (index) {
+          pageController.jumpToPage(index);
+          setState(() {
+            selected = index;
+          });
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        // shape: CircleBorder(),
+        onPressed: () {
+          setState(() {
+            //  heart = !heart;
+          });
+        },
+        // backgroundColor: Colors.white,
+        child: Icon(
+          Icons.shopify_sharp,
+          color: Colors.red,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: SafeArea(
+        child: PageView(
+          controller: pageController,
+          onPageChanged: (index) {
+            setState(() {
+              selected = index;
+            });
+          },
+          children: const [
+            Home(),
+            Center(child: Text('Style')),
+            Center(child: Text('Starr')),
+            Center(child: Text('Style')),
           ],
         ),
       ),
-      bottomSheet: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.category),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.shopping_cart),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.favorite),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.person),
-              onPressed: () {},
-            ),
-          ],
-        ),
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  const Home({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Banners
+          banner.Banner(),
+
+          // Categories
+
+          CategorySection(),
+          // Products
+
+          Products(),
+        ],
       ),
     );
   }

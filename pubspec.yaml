@@ -16,6 +16,7 @@ dependencies:
   cloud_firestore: ^4.15.6
   get_storage: ^2.1.1
   carousel_slider: ^4.2.1
+  stylish_bottom_bar: ^1.0.3
 
 dev_dependencies:
   flutter_test:

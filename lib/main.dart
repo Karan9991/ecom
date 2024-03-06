@@ -1,5 +1,4 @@
 import 'package:ecom/firebase_options.dart';
-import 'package:ecom/screens/auth/sign_in.dart';
 import 'package:ecom/screens/home/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
