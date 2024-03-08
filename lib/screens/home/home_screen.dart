@@ -1,7 +1,5 @@
 import 'package:ecom/controller/home_controller.dart';
-import 'package:ecom/screens/home/banner.dart' as banner;
-import 'package:ecom/screens/home/categories.dart';
-import 'package:ecom/screens/home/products.dart';
+import 'package:ecom/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
@@ -15,20 +13,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final HomeController controller = Get.put(HomeController());
   dynamic selected;
   PageController pageController = PageController();
 
   @override
   void dispose() {
-    controller.dispose();
+    pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // extendBody: true,
       appBar: AppBar(
         flexibleSpace: Padding(
           padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
@@ -53,10 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: StylishBottomBar(
         option: AnimatedBarOptions(
-          // iconSize: 32,
           barAnimation: BarAnimation.fade,
           iconStyle: IconStyle.animated,
-          // opacity: 0.3,
         ),
         items: [
           BottomBarItem(
@@ -64,11 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Icons.house_outlined,
             ),
             selectedIcon: const Icon(Icons.house_rounded),
-            // selectedColor: Colors.teal,
             backgroundColor: Colors.greenAccent,
             title: const Text('Home'),
-            //badge: const Text('9+'),
-            // showBadge: true,
           ),
           BottomBarItem(
             icon: const Icon(Icons.category),
@@ -111,13 +102,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
-        // shape: CircleBorder(),
         onPressed: () {
           setState(() {
-            //  heart = !heart;
           });
         },
-        // backgroundColor: Colors.white,
         child: Icon(
           Icons.shopify_sharp,
           color: Colors.red,
@@ -139,32 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(child: Text('Style')),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  const Home({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Banners
-          banner.Banner(),
-
-          // Categories
-
-          CategorySection(),
-          // Products
-
-          Products(),
-        ],
       ),
     );
   }

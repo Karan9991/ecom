@@ -1,3 +1,4 @@
+import 'package:ecom/screens/home/home.dart';
 import 'package:ecom/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';

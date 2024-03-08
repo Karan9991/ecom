@@ -15,7 +15,7 @@ class CategorySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
+       const Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(
             'Categories',
@@ -29,17 +29,17 @@ class CategorySection extends StatelessWidget {
             itemCount: categories.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                padding:const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Column(
                   children: [
                     CircleAvatar(
                       radius: 30,
                       backgroundImage: AssetImage(categoryImages[index]),
                     ),
-                    SizedBox(height: 4),
+                   const SizedBox(height: 4),
                     Text(
                       categories[index],
-                      style: TextStyle(fontSize: 12),
+                      style:const TextStyle(fontSize: 12),
                     ),
                   ],
                 ),

@@ -1,3 +1,4 @@
+import 'package:ecom/admin/categories.dart';
 import 'package:ecom/firebase_options.dart';
 import 'package:ecom/screens/home/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,7 +30,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.green,
       ),
-      home: HomeScreen(),
+      home: Categories(),
     );
   }
 }
