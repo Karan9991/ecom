@@ -24,6 +24,8 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
     super.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
