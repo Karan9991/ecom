@@ -35,8 +35,11 @@ class _CategoriesState extends State<Categories> {
     final imageUrl = await ref.getDownloadURL();
     _firestore
         .collection('categories')
-        .add({'name': name, 'imageUrl': imageUrl});
+        .doc(name)
+        .set({'name': name, 'imageUrl': imageUrl});
   }
+
+
 
   @override
   Widget build(BuildContext context) {
