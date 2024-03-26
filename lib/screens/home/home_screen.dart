@@ -1,7 +1,5 @@
-import 'package:ecom/controller/home_controller.dart';
 import 'package:ecom/screens/home/home.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 

@@ -1,5 +1,5 @@
 import 'package:ecom/firebase_options.dart';
-import 'package:ecom/screens/home/home_screen.dart';
+import 'package:ecom/screens/home/product_detail.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,12 +15,23 @@ void main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(const MainApp());
+    runApp( MainApp());
   });
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+   MainApp({super.key});
+  final Map<String, dynamic> product = {
+    'name': 'Sample Product',
+    'price': 99.99,
+    'description': 'This is a sample product description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    'imageUrl': 'assets/images/logo.png',
+    'images': [
+      'assets/images/logo.png',
+      'assets/images/banner1.png',
+      'assets/images/banner2.png',
+    ],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +40,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.green,
       ),
-      home: HomeScreen(),
+      home: ProductDetailsScreen(product: product,),
     );
   }
 }
