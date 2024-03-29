@@ -1,4 +1,9 @@
+import 'package:ecom/widgets/cart_widget.dart';
 import 'package:ecom/firebase_options.dart';
+import 'package:ecom/screens/auth/sign_in.dart';
+import 'package:ecom/screens/home/cart.dart';
+import 'package:ecom/screens/home/home.dart';
+import 'package:ecom/screens/home/home_screen.dart';
 import 'package:ecom/screens/home/product_detail.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +45,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.green,
       ),
-      home: ProductDetailsScreen(product: product,),
+      home: SignInScreen(),
     );
   }
 }

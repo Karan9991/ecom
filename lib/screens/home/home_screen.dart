@@ -1,7 +1,10 @@
+import 'package:ecom/screens/home/cart.dart';
 import 'package:ecom/screens/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -101,13 +104,21 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: () {
-          setState(() {
-          });
+         Get.to(CartScreen());
         },
-        child: Icon(
-          Icons.shopify_sharp,
-          color: Colors.red,
-        ),
+        child:
+          badges.Badge(
+            badgeStyle: badges.BadgeStyle(badgeColor: Colors.lightBlueAccent),
+            badgeContent: Text(
+              '3',
+              style: TextStyle(color: Colors.white),
+            ),
+            position: badges.BadgePosition.topEnd(top: -15, end: -9),
+            child: Icon(Icons.shopify_sharp, size: 30, color: Colors.red,),
+
+
+          )
+
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SafeArea(

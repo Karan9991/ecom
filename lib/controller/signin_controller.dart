@@ -1,3 +1,4 @@
+import 'package:ecom/screens/home/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,20 @@ class SignInController extends GetxController {
 
   @override
   void onInit() {
+    loadSignIn();
     loadRememberMe();
     super.onInit();
   }
+
+  Future<void> loadSignIn() async{
+    User? user = await _auth.currentUser;
+    if(user != null){
+      Get.offAll(HomeScreen());
+    }else{
+
+    }
+  }
+
 
   Future<void> loadRememberMe() async {
     bool? remember = GetStorage().read('rememberme');
@@ -49,6 +61,7 @@ class SignInController extends GetxController {
         Get.snackbar('Signin', 'Sign in ');
         saveRememberMe(rememberMe.value, emailController.text, passwordController.text);
         // Navigate to the next screen upon successful sign-in
+        Get.off(HomeScreen());
         // Get.off(NextScreen());
       } catch (e) {
         Get.snackbar('Error', e.toString());

@@ -1,12 +1,27 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom/screens/home/product_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Products extends StatelessWidget {
-  const Products({Key? key}) : super(key: key);
+   Products({Key? key}) : super(key: key);
+   List<Map<String, dynamic>> productsData = [];
+
+  final Map<String, dynamic> product = {
+    'name': 'Sample Product',
+    'price': 99.99,
+    'description': 'This is a sample product description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    'imageUrl': 'assets/images/logo.png',
+    'images': [
+      'assets/images/logo.png',
+      'assets/images/banner1.png',
+      'assets/images/banner2.png',
+    ],
+  };
 
   Stream<List<Map<String, dynamic>>> dataStream() async* {
-    List<Map<String, dynamic>> productsData = [];
     QuerySnapshot<Map<String, dynamic>> cat = await FirebaseFirestore.instance.collection('categories').get();
 
     for (QueryDocumentSnapshot<Map<String, dynamic>> doc in cat.docs) {
@@ -44,22 +59,28 @@ class Products extends StatelessWidget {
                   crossAxisCount: 2),
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
+                String url =  snapshot.data![index]['imageUrl'][index];
+
                 return Padding(padding: const EdgeInsets.all(5.0,),
                   child: GestureDetector(
                     onTap: () {
-                     // Get.off(ProductDetail());
+                      Get.to(ProductDetailsScreen(product: productsData[index]));
                     },
+
 
                     child: Card(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.network(
-                            snapshot.data![index]['imageUrl'][index],
-                            height: 120,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
+                          CachedNetworkImage(imageUrl: snapshot.data![index]['imageUrl'][index],
+                          height: 120,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                            placeholder: (context, url) => Center(child:CircularProgressIndicator() ,),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+
                           ),
+
                           Padding(padding: const EdgeInsets.all(8.0),
                             child:
                             Row(
