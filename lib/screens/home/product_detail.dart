@@ -1,3 +1,5 @@
+import 'package:ecom/controller/productDetails_controller.dart';
+import 'package:ecom/data/fetchData.dart';
 import 'package:ecom/screens/home/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,52 +7,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:badges/badges.dart' as badges;
 
-class ProductDetailsScreen extends StatefulWidget {
+class ProductDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> product;
 
-  const ProductDetailsScreen({Key? key, required this.product}) : super(key: key);
+   ProductDetailsScreen({super.key, required this.product});
 
-  @override
-  _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
-}
-
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  int _quantity = 1;
-  String? mainImage; // Initialize mainImage variable
+  final ProductDetailsController controller = Get.put(ProductDetailsController());
+  String? mainImage;
   bool _favouriteToggle = false;
-
-
-  Future<void> addToCart(Map<String, dynamic> product, int quantity) async {
-    try {
-      // Get the current user
-      User? user = FirebaseAuth.instance.currentUser;
-
-      if (user != null) {
-        // Reference to the "cart" collection for the current user
-        CollectionReference cartRef = FirebaseFirestore.instance.collection('users').doc(user.uid).collection('cart');
-
-        // Add the product data to the user's cart collection
-        await cartRef.add({
-          'image': product['imageUrl'], // Assuming 'image' is the key for the product image URL
-          'name': product['name'],
-          'price': product['price'],
-          'description': product['description'],
-          'quantity': quantity,
-          'timestamp': FieldValue.serverTimestamp(), // Optional: Timestamp of when the item was added
-        });
-
-        print('Product added to cart successfully!');
-      } else {
-        print('No user signed in.');
-      }
-    } catch (e) {
-      print('Error adding product to cart: $e');
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
+    FetchData().fetchCart();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product Details'),
@@ -92,11 +60,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       )
                     ),
                     child:
-                    Image.network(
-                      mainImage ?? widget.product['imageUrl'][0],
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                        Obx(() =>  Image.network(
+                          controller.mainImage.value.isNotEmpty ?
+                          controller.mainImage.value : product['imageUrl'][0],
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),),
+
 
                   ),
                 ),
@@ -107,32 +77,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                for (var image in widget.product['imageUrl'])
+                for (var image in product['imageUrl'])
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        mainImage = image;
-                      });
+                      controller.updateMainImage(image);
+
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
-                        child: Container(
+                        child: Obx(() =>  Container(
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: mainImage == image
+                              color: controller.mainImage.value == image
                                   ? Colors.green
                                   : Colors.transparent,
                               width: 2.0,
                             ),
                           ),
                           child:
-                            Image.network(image, fit: BoxFit.cover),
+                          Image.network(image, fit: BoxFit.cover),
 
-                        ),
+                        ),),
                       ),
                     ),
                   ),
@@ -146,7 +115,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.product['name'],
+                    product['name'],
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -154,7 +123,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                   SizedBox(height: 8.0),
                   Text(
-                    '\$${widget.product['price']}',
+                    '\$${product['price']}',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.green,
@@ -162,7 +131,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                   SizedBox(height: 8.0),
                   Text(
-                    widget.product['description'],
+                    product['description'],
                     style: const TextStyle(
                       fontSize: 16,
                     ),
@@ -175,32 +144,35 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     children: [
                       const Text('Quantity:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                       IconButton(onPressed: (){
-                        setState(() {
-                          if(_quantity > 1) {
-                            _quantity--;
+                        //setState(() {
+                          if(controller.quantity > 1) {
+                            controller.quantity--;
                           }
-                        });
+                        //});
 
                       }, icon: Icon(Icons.remove)),
-                      Text('$_quantity', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                      Obx(() => Text('${controller.quantity.value}',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                      ),
 
                       IconButton(onPressed: (){
-                        setState(() {
-                          _quantity++;
+                        controller.quantity++;
+                       // setState(() {
+                         // _quantity++;
 
-                        });
+                       // });
                       }, icon: Icon(Icons.add)),
                       const Spacer(),
                       IconButton(
                         onPressed: () {
-                          setState(() {
-                            _favouriteToggle = !_favouriteToggle;
-                          });
+                        //  controller.favourite(docum)
+                          // setState(() {
+                          //   _favouriteToggle = !_favouriteToggle;
+                          // });
                         },
                         icon: Icon(_favouriteToggle ? Icons.favorite : Icons.favorite_border, color: Colors.red,),
                       ),
                     ],
-
                   ),
 
                   const SizedBox(height: 16.0,),
@@ -209,8 +181,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                       onPressed: () async{
-                       await addToCart(widget.product, _quantity);
-                        await Get.to(CartScreen());
+                       await controller.addToCart(product);
                       },
                       child: const Text('Add to Cart', style: TextStyle(color: Colors.white),),
                     ),
