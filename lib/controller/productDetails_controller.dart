@@ -46,6 +46,27 @@ class ProductDetailsController extends GetxController{
     }
   }
 
+  Future<void> initialFavourite(String productId) async{
+
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot favouriteDoc = await FirebaseFirestore.instance
+          .collection('users').doc(user.uid).collection('favourites').doc(productId).get();
+
+      if(favouriteDoc.exists){
+      //  await favouriteDoc.reference.delete();
+        favouriteToggle.value = true;
+      }else{
+        // await FirebaseFirestore.instance.collection('users').doc(user.uid)
+        //     .collection('favourites').doc(productId).set({'productId' : productId});
+        favouriteToggle.value = false;
+      }
+      debugPrint('Favourite ${favouriteToggle.value}');
+      debugPrint('ProductId from inititalFavourite ${productId}');
+    }
+  }
+
+
   Future<void> favourite(String productId) async{
     try{
       User? user = FirebaseAuth.instance.currentUser;
@@ -64,7 +85,6 @@ class ProductDetailsController extends GetxController{
       }
     }catch (e){
       debugPrint('Error toggling favourite $e');
-
     }
     
   }

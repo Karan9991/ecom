@@ -8,6 +8,7 @@ class FetchData{
 
   final firestore = FirebaseFirestore.instance;
   final firebaseAuth = FirebaseAuth.instance;
+  List<String> productDocumentId = [];
 
   Future<List<Product>> fetchProducts() async{
     List<Product> productsData = [];
@@ -15,6 +16,7 @@ class FetchData{
     for(QueryDocumentSnapshot snapshot in categories.docs){
       QuerySnapshot<Map<String, dynamic>> products = await snapshot.reference.collection('products').get();
       for(QueryDocumentSnapshot snaps in products.docs){
+        productDocumentId.add(snaps.id);
         final data = snaps.data() as Map<String, dynamic>;
         productsData.add(Product.fromJson(data));
       }
@@ -22,6 +24,28 @@ class FetchData{
     // debugPrint('fetch data ${productsData[0].imageUrl[0]}');
     return productsData;
   }
+
+  Future<List<Map<String, dynamic>>> fetchProductsMap() async{
+    List<Map<String, dynamic>> productsData = [];
+    QuerySnapshot<Map<String, dynamic>> categories = await firestore.collection('categories').get();
+    for(QueryDocumentSnapshot snapshot in categories.docs){
+      QuerySnapshot<Map<String, dynamic>> products = await snapshot.reference.collection('products').get();
+      for(QueryDocumentSnapshot snaps in products.docs){
+        productDocumentId.add(snaps.id);
+        final data = snaps.data() as Map<String, dynamic>;
+        productsData.add(data);
+      }
+    }
+    // debugPrint('fetch data ${productsData[0].imageUrl[0]}');
+    return productsData;
+  }
+
+  Future<List<String>> fetchProductsDocumentId() async{
+   await fetchProducts();
+    //debugPrint('products id $productDocumentId');
+    return productDocumentId;
+  }
+
 
   Future<List<Users>> fetchUser() async{
     List<Users> usersData = [];
@@ -44,7 +68,6 @@ class FetchData{
   }
 
   Future<List<Cart>> fetchCart() async{
-    //List<Map<String, dynamic>> carts = [];
     List<Cart> carts = [];
     User? user = firebaseAuth.currentUser;
     try{
@@ -66,6 +89,30 @@ class FetchData{
 
     }
   }
+
+  Future<List<String>> fetchFavourites() async{
+    User? user = firebaseAuth.currentUser;
+    List<String> favourites = [];
+
+    try {
+      if (user != null) {
+        QuerySnapshot<Map<String, dynamic>> favouritesSnapshot = await firestore
+            .collection(
+            'users').doc(user.uid).collection('favourites').get();
+        for (QueryDocumentSnapshot queryDocumentSnapshot in favouritesSnapshot.docs) {
+          final data = queryDocumentSnapshot.data() as Map
+          <String, dynamic>;
+          favourites.add(data['productId']);
+          debugPrint('Favourites ${data['productId']}');
+        }
+      }
+      return favourites;
+    }catch (e){
+      debugPrint('Error fetching favourites $e');
+      return [];
+    }
+  }
+
 
 }
 

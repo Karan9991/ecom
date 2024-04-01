@@ -35,11 +35,11 @@ class Banner extends StatelessWidget {
               ),
               itemBuilder: (context, index, realIndex) {
                 final banner = banners[index];
-                debugPrint('banner $banner');
+               // debugPrint('banner $banner');
 
                 final imageUrl = banner['imageUrl'];
 
-                debugPrint('imageurl $imageUrl');
+               // debugPrint('imageurl $imageUrl');
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),

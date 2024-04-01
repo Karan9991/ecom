@@ -1,4 +1,5 @@
 import 'package:ecom/controller/productDetails_controller.dart';
+import 'package:ecom/controller/products_controller.dart';
 import 'package:ecom/data/fetchData.dart';
 import 'package:ecom/screens/home/cart.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +10,19 @@ import 'package:badges/badges.dart' as badges;
 
 class ProductDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> product;
+  final String productId;
+  final int productIndex;
 
-   ProductDetailsScreen({super.key, required this.product});
+   ProductDetailsScreen({super.key, required this.product, required this.productId,
+   required this.productIndex});
 
   final ProductDetailsController controller = Get.put(ProductDetailsController());
+  final productsController = Get.put(ProductController());
   String? mainImage;
-  bool _favouriteToggle = false;
 
   @override
   Widget build(BuildContext context) {
-    FetchData().fetchCart();
+    controller.initialFavourite(productId);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product Details'),
@@ -144,11 +148,9 @@ class ProductDetailsScreen extends StatelessWidget {
                     children: [
                       const Text('Quantity:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                       IconButton(onPressed: (){
-                        //setState(() {
                           if(controller.quantity > 1) {
                             controller.quantity--;
                           }
-                        //});
 
                       }, icon: Icon(Icons.remove)),
                       Obx(() => Text('${controller.quantity.value}',
@@ -157,20 +159,21 @@ class ProductDetailsScreen extends StatelessWidget {
 
                       IconButton(onPressed: (){
                         controller.quantity++;
-                       // setState(() {
-                         // _quantity++;
 
-                       // });
                       }, icon: Icon(Icons.add)),
                       const Spacer(),
                       IconButton(
                         onPressed: () {
-                        //  controller.favourite(docum)
-                          // setState(() {
-                          //   _favouriteToggle = !_favouriteToggle;
-                          // });
+                          productsController.isLoading.value = true;
+                          controller.favourite(productId);
+                          productsController.favourite(productIndex);
+                          productsController.isLoading.value = false;
+
                         },
-                        icon: Icon(_favouriteToggle ? Icons.favorite : Icons.favorite_border, color: Colors.red,),
+                        icon:
+                            Obx(() =>
+                        Icon(controller.favouriteToggle.value ? Icons.favorite : Icons.favorite_border, color: Colors.red,),
+                            ),
                       ),
                     ],
                   ),
@@ -183,7 +186,7 @@ class ProductDetailsScreen extends StatelessWidget {
                       onPressed: () async{
                        await controller.addToCart(product);
                       },
-                      child: const Text('Add to Cart', style: TextStyle(color: Colors.white),),
+                      child: const Text('Add to cart', style: TextStyle(color: Colors.white),),
                     ),
                   ),
                 ],
