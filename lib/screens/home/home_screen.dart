@@ -1,3 +1,6 @@
+import 'package:ecom/controller/home_controller.dart';
+import 'package:ecom/data/fetchData.dart';
+import 'package:ecom/model/product_%20model.dart';
 import 'package:ecom/screens/home/cart.dart';
 import 'package:ecom/screens/home/home.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'package:badges/badges.dart' as badges;
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -16,6 +19,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   dynamic selected;
   PageController pageController = PageController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+
 
   @override
   void dispose() {

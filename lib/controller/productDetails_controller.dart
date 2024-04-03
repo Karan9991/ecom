@@ -1,4 +1,5 @@
 
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,8 +10,22 @@ class ProductDetailsController extends GetxController{
   var mainImage = ''.obs;
   var favouriteToggle = false.obs;
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
+
   void updateMainImage(String image){
     mainImage.value = image;
+  }
+
+  void resetMainImage(){
+    mainImage.value = '';
+  }
+
+  void resetQuantity(){
+    quantity.value = 1;
   }
 
   Future<void> addToCart(Map<String, dynamic> product) async {
@@ -87,37 +102,6 @@ class ProductDetailsController extends GetxController{
       debugPrint('Error toggling favourite $e');
     }
     
-  }
-
-  Future<void> favouritee(String name, int price, String description) async{
-    try {
-      // Get the current user
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        // Reference to the "favourite" collection for the current user
-        CollectionReference favouriteRef = FirebaseFirestore.instance
-            .collection('users').doc(user.uid).collection('favourite');
-        // Add the product data to the user's favourite collection
-        await favouriteRef.add({
-          'image': mainImage.value,
-          // Assuming 'image' is the key for the product image URL
-          'name': name,
-          'price': price,
-          'description': description,
-        });
-        print('Product added to favourite successfully!');
-        Get.snackbar(
-          'Product added to favourite!', '',
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.green,
-        );
-        favouriteToggle.value = true;
-
-      }
-    }catch (e){
-
-    }
-
   }
 
 }

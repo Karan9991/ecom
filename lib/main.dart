@@ -26,17 +26,7 @@ void main() async {
 
 class MainApp extends StatelessWidget {
    MainApp({super.key});
-  final Map<String, dynamic> product = {
-    'name': 'Sample Product',
-    'price': 99.99,
-    'description': 'This is a sample product description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    'imageUrl': 'assets/images/logo.png',
-    'images': [
-      'assets/images/logo.png',
-      'assets/images/banner1.png',
-      'assets/images/banner2.png',
-    ],
-  };
+
 
   @override
   Widget build(BuildContext context) {

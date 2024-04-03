@@ -2,6 +2,7 @@ import 'package:ecom/screens/home/banner.dart' as banner;
 import 'package:ecom/screens/home/categories.dart';
 import 'package:ecom/screens/home/products.dart';
 import 'package:flutter/material.dart';
+import 'package:ecom/model/product_ model.dart';
 
 class Home extends StatelessWidget {
   const Home({
@@ -13,13 +14,13 @@ class Home extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children:  [
           // Banners
           banner.Banner(),
           // Categories
           CategorySection(),
           // Products
-          Products(),
+         const Products(),
         ],
       ),
     );

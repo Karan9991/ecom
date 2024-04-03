@@ -12,6 +12,7 @@ class FetchData{
 
   Future<List<Product>> fetchProducts() async{
     List<Product> productsData = [];
+
     QuerySnapshot<Map<String, dynamic>> categories = await firestore.collection('categories').get();
     for(QueryDocumentSnapshot snapshot in categories.docs){
       QuerySnapshot<Map<String, dynamic>> products = await snapshot.reference.collection('products').get();
@@ -45,7 +46,6 @@ class FetchData{
     //debugPrint('products id $productDocumentId');
     return productDocumentId;
   }
-
 
   Future<List<Users>> fetchUser() async{
     List<Users> usersData = [];

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> product;
@@ -23,6 +24,9 @@ class ProductDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     controller.initialFavourite(productId);
+    controller.resetMainImage();
+    controller.resetQuantity();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product Details'),
@@ -64,12 +68,12 @@ class ProductDetailsScreen extends StatelessWidget {
                       )
                     ),
                     child:
-                        Obx(() =>  Image.network(
-                          controller.mainImage.value.isNotEmpty ?
-                          controller.mainImage.value : product['imageUrl'][0],
+                        Obx(() =>
+                        CachedNetworkImage(imageUrl:  controller.mainImage.value.isNotEmpty ?
+                        controller.mainImage.value : product['imageUrl'][0],
                           width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),),
+                          fit: BoxFit.cover,),
+                        ),
 
 
                   ),
@@ -103,7 +107,9 @@ class ProductDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           child:
-                          Image.network(image, fit: BoxFit.cover),
+                              CachedNetworkImage(imageUrl: image, fit: BoxFit.cover)
+                          //Image.network(image, fit: BoxFit.cover),
+
 
                         ),),
                       ),
@@ -142,7 +148,6 @@ class ProductDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
 
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -164,10 +169,10 @@ class ProductDetailsScreen extends StatelessWidget {
                       const Spacer(),
                       IconButton(
                         onPressed: () {
-                          productsController.isLoading.value = true;
+                          productsController.isLoading2.value = true;
                           controller.favourite(productId);
-                          productsController.favourite(productIndex);
-                          productsController.isLoading.value = false;
+                          productsController.setFavouriteToggle(productIndex);
+                          productsController.isLoading2.value = false;
 
                         },
                         icon:
