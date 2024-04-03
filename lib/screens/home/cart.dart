@@ -20,20 +20,37 @@ class _CartScreenState extends State<CartScreen> {
 
   final controller = Get.put(CartController());
 
+  void sum() {
+    List<int> numbers = [1, 2, 3, 4, 5];
+
+    int sum = numbers.reduce((value, element) => value + element);
+
+    print('The sum of all numbers is: $sum');
+  }
+
   @override
   Widget build(BuildContext context) {
+    sum();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shopping Cart'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-       child:
+      body:Column(
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+       //  Padding(
+       //  padding: const EdgeInsets.all(16.0),
+       // child:
        Obx(() =>
           controller.isLoading.value ? Container() :
-          ListView.builder(itemCount: controller.products.value.length,
+        Expanded(child:  ListView.builder(itemCount: controller.products.value.length,
               itemBuilder: (context, index){
-             return Padding(padding: EdgeInsets.all(8.0),
+
+
+              //  int total =  controller.isLoading.value ? controller.totalAmount() : 0;
+
+                return Padding(padding: EdgeInsets.all(12.0),
              child: Obx(() => controller.isLoading.value ? Container() :
 
                 Container(decoration: BoxDecoration(
@@ -44,7 +61,6 @@ class _CartScreenState extends State<CartScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                 ClipRRect(child:
-
                 CachedNetworkImage(imageUrl: controller.products.value[index]['image'][0],
                    height: 130, width: 120, fit: BoxFit.fill,),
                 borderRadius: BorderRadius.circular(12),
@@ -150,44 +166,66 @@ class _CartScreenState extends State<CartScreen> {
              ),
 
              );
-           }) ,
+           }) ,),
 
        ),
-      ),
-      bottomSheet:    ElevatedButton(
-        onPressed: () {
-          // Show modal bottom sheet
-          showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return Container(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Total amount text
-                    Text(
-                      'Total Amount: 200', // Format total amount with two decimal places
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 20),
-                    // Check-out button
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle check-out button press
-                        Get.back(); // Close the bottom sheet
-                        // Add your check-out logic here
-                      },
-                      child: const Text('Check Out'),
-                    ),
-                  ],
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+
+Obx(() =>
+              Text( 'Total ${controller.total.value}',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
-              );
-            },
-          );
-        },
-        child: const Text('View Cart'),
+                textAlign: TextAlign.center,
+              ),
+        ),
+                Text(
+                  ' \$200.00',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+              ],),
+              SizedBox(height: 6.0),
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                child: Text(
+                  'Proceed to Checkout',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+
+      ]
       ),
+
     );
   }
 }
+

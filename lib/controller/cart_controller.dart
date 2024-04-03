@@ -12,6 +12,8 @@ class CartController extends GetxController{
   var isLoading2 = true.obs;
   var isLoading3 = true.obs;
   var quantity = <int>[].obs;
+  var price = <int>[].obs;
+  var total = 0.obs;
 
   @override
   void onInit() {
@@ -25,8 +27,25 @@ class CartController extends GetxController{
     isLoading.value = false;
     isLoading2.value = false;
     isLoading3.value = false;
+   await totalAmount();
 
   }
+
+  int totalAmount(){
+    if(!isLoading.value) {
+      total.value = price.value.reduce((value, element) => value + element);
+      return total.value;
+    }else{
+      return 0;
+    }
+  }
+
+  void totalAmountReset(){
+    total.value = 0;
+
+  }
+
+
 
   Future<List<Map<String, dynamic>>> getCart() async{
     User? user = await FirebaseAuth.instance.currentUser;
@@ -41,6 +60,7 @@ class CartController extends GetxController{
         documentId.value.add(snapshot.id);
         final data =snapshot.data() as Map<String, dynamic>;
         quantity.value.add(data['quantity']);
+        price.value.add(data['price']);
         products.value.add(data) ;
       }
 
@@ -55,6 +75,7 @@ class CartController extends GetxController{
   }
 
   Future<void> removeFromCart(String documentId, int index) async {
+    totalAmountReset();
     isLoading.value = true;
     try {
       User? user = FirebaseAuth.instance.currentUser;
