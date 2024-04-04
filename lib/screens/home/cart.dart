@@ -20,17 +20,8 @@ class _CartScreenState extends State<CartScreen> {
 
   final controller = Get.put(CartController());
 
-  void sum() {
-    List<int> numbers = [1, 2, 3, 4, 5];
-
-    int sum = numbers.reduce((value, element) => value + element);
-
-    print('The sum of all numbers is: $sum');
-  }
-
   @override
   Widget build(BuildContext context) {
-    sum();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shopping Cart'),
@@ -179,8 +170,7 @@ class _CartScreenState extends State<CartScreen> {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
 
-Obx(() =>
-              Text( 'Total ${controller.total.value}',
+              Text('Total ',
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 18,
@@ -188,9 +178,10 @@ Obx(() =>
                 ),
                 textAlign: TextAlign.center,
               ),
-        ),
-                Text(
-                  ' \$200.00',
+      Obx(() =>
+
+          Text(
+                  ' \$${controller.total.value}',
                   style: TextStyle(
                     color: Colors.green,
                     fontSize: 18,
@@ -198,8 +189,10 @@ Obx(() =>
                   ),
                   textAlign: TextAlign.center,
                 ),
+),
 
-              ],),
+
+    ],),
               SizedBox(height: 6.0),
               ElevatedButton(
                 onPressed: () {},

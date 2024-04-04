@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
-
 class CartController extends GetxController{
   var products = <Map<String, dynamic>>[].obs;
   var documentId = <String>[].obs;
@@ -27,24 +25,39 @@ class CartController extends GetxController{
     isLoading.value = false;
     isLoading2.value = false;
     isLoading3.value = false;
-   await totalAmount();
+   await calculateTotalPrice();
 
   }
 
-  int totalAmount(){
-    if(!isLoading.value) {
-      total.value = price.value.reduce((value, element) => value + element);
-      return total.value;
-    }else{
+  // int totalAmount(){
+  //   if(!isLoading.value) {
+  //     total.value = price.value.reduce((value, element) => value + element);
+  //     return total.value;
+  //   }else{
+  //     return 0;
+  //   }
+  // }
+
+  Future<void> totalAmountReset() async{
+    total.value = 0;
+  }
+
+  int calculateTotalPrice() {
+
+    if (!isLoading2.value) {
+
+      int totalPrice = 0;
+      for (int i = 0; i < products.length; i++) {
+        int itemTotalPrice = quantity[i] * price[i];
+        totalPrice += itemTotalPrice;
+      }
+      total.value = totalPrice;
+      return totalPrice;
+    }
+    else{
       return 0;
     }
   }
-
-  void totalAmountReset(){
-    total.value = 0;
-
-  }
-
 
 
   Future<List<Map<String, dynamic>>> getCart() async{
@@ -61,11 +74,13 @@ class CartController extends GetxController{
         final data =snapshot.data() as Map<String, dynamic>;
         quantity.value.add(data['quantity']);
         price.value.add(data['price']);
-        products.value.add(data) ;
+        products.value.add(data);
       }
 
       debugPrint('cart list ${products}');
       debugPrint('documentId list ${documentId}');
+      await totalAmountReset();
+      await calculateTotalPrice();
       return products;
 
     }else{
@@ -75,7 +90,7 @@ class CartController extends GetxController{
   }
 
   Future<void> removeFromCart(String documentId, int index) async {
-    totalAmountReset();
+    // totalAmountReset();
     isLoading.value = true;
     try {
       User? user = FirebaseAuth.instance.currentUser;
@@ -89,6 +104,8 @@ class CartController extends GetxController{
             'cart');
         await cartRef.doc(documentId).delete();
         products.value.removeAt(index);
+        quantity.value.removeAt(index);
+        price.value.removeAt(index);
         debugPrint('removeFromCart end ${products}');
 
         print('Product removed from cart successfully!');
@@ -97,9 +114,12 @@ class CartController extends GetxController{
       print('Error removing product from cart: $e');
     }
     isLoading.value = false;
+    await totalAmountReset();
+    await calculateTotalPrice();
   }
 
   Future<void> incrementQuantity(String documentId, int index) async{
+
     isLoading2.value = true;
 
     User? user = FirebaseAuth.instance.currentUser;
@@ -114,6 +134,8 @@ class CartController extends GetxController{
       print('Quantity incremented successfully!');
     }
     isLoading2.value = false;
+   await totalAmountReset();
+   await calculateTotalPrice();
   }
 
   Future<void> decrementQuantity(String documentId, int index) async{
@@ -132,6 +154,8 @@ class CartController extends GetxController{
       print('Quantity decremented successfully!');
       isLoading2.value = false;
 
+      await totalAmountReset();
+      await calculateTotalPrice();
     }
   }
 
