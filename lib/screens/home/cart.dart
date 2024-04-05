@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom/controller/cart_controller.dart';
-import 'package:ecom/widgets/cart_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,17 +26,13 @@ class _CartScreenState extends State<CartScreen> {
         title: const Text('Shopping Cart'),
       ),
       body:Column(
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        // mainAxisAlignment: MainAxisAlignment.center,
+
       children: [
-       //  Padding(
-       //  padding: const EdgeInsets.all(16.0),
-       // child:
+
        Obx(() =>
           controller.isLoading.value ? Container() :
         Expanded(child:  ListView.builder(itemCount: controller.products.value.length,
               itemBuilder: (context, index){
-
 
               //  int total =  controller.isLoading.value ? controller.totalAmount() : 0;
 
@@ -197,7 +192,7 @@ class _CartScreenState extends State<CartScreen> {
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: Theme.of(context).primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),

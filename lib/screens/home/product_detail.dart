@@ -57,14 +57,14 @@ class ProductDetailsScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child:
-                ClipRRect(borderRadius: BorderRadius.circular(8.0),
+                ClipRRect(borderRadius: BorderRadius.circular(18.0),
                   child:
                   Container(
                     height: 300,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Colors.green,
-                        width: 2.0
+                        width: 4.0
                       )
                     ),
                     child:
@@ -74,8 +74,6 @@ class ProductDetailsScreen extends StatelessWidget {
                           width: double.infinity,
                           fit: BoxFit.cover,),
                         ),
-
-
                   ),
                 ),
             ),
@@ -93,26 +91,32 @@ class ProductDetailsScreen extends StatelessWidget {
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(right: 8.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Obx(() =>  Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: controller.mainImage.value == image
-                                  ? Colors.green
-                                  : Colors.transparent,
-                              width: 2.0,
+                      child:
+                      Container(
+                          padding: EdgeInsets.all(3), // Border width
+                          decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(16.0)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16.0),
+                            child: Obx(() =>  Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: controller.mainImage.value == image
+                                      ? Colors.greenAccent
+                                      : Colors.transparent,
+                                  width: 2.0,
+                                ),
+                              ),
+                              child: SizedBox.fromSize(
+                                  size: Size.fromRadius(48), // Image radius
+                                  child: CachedNetworkImage(imageUrl: image, fit: BoxFit.cover)
+                              ),
                             ),
-                          ),
-                          child:
-                              CachedNetworkImage(imageUrl: image, fit: BoxFit.cover)
-                          //Image.network(image, fit: BoxFit.cover),
-
-
-                        ),),
+                            ),
+                          )
                       ),
+
                     ),
                   ),
               ],

@@ -29,15 +29,6 @@ class CartController extends GetxController{
 
   }
 
-  // int totalAmount(){
-  //   if(!isLoading.value) {
-  //     total.value = price.value.reduce((value, element) => value + element);
-  //     return total.value;
-  //   }else{
-  //     return 0;
-  //   }
-  // }
-
   Future<void> totalAmountReset() async{
     total.value = 0;
   }

@@ -1,4 +1,3 @@
-import 'package:ecom/widgets/cart_widget.dart';
 import 'package:ecom/firebase_options.dart';
 import 'package:ecom/screens/auth/sign_in.dart';
 import 'package:ecom/screens/home/cart.dart';
@@ -27,14 +26,21 @@ void main() async {
 class MainApp extends StatelessWidget {
    MainApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+      theme: ThemeData(useMaterial3: true,
         primaryColor: Colors.green,
+        primaryColorLight: Colors.greenAccent,
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        primaryColor: Colors.lightGreen,
+        primaryColorLight: Colors.grey,
+
+      ),
+      themeMode: ThemeMode.light,
       home: SignInScreen(),
     );
   }
