@@ -1,5 +1,6 @@
 import 'package:ecom/firebase_options.dart';
 import 'package:ecom/screens/auth/sign_in.dart';
+import 'package:ecom/screens/auth/sign_up.dart';
 import 'package:ecom/screens/home/cart.dart';
 import 'package:ecom/screens/home/home.dart';
 import 'package:ecom/screens/home/home_screen.dart';
@@ -29,6 +30,11 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      getPages: [
+        GetPage(name: '/home', page: () => HomeScreen()),
+        GetPage(name: '/signin', page: () => SignInScreen()),
+        GetPage(name: '/singup', page: () => SignUpScreen()),
+      ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(useMaterial3: true,
         primaryColor: Colors.green,
@@ -38,7 +44,6 @@ class MainApp extends StatelessWidget {
         useMaterial3: true,
         primaryColor: Colors.lightGreen,
         primaryColorLight: Colors.grey,
-
       ),
       themeMode: ThemeMode.light,
       home: SignInScreen(),

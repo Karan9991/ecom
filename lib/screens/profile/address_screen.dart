@@ -1,7 +1,11 @@
+import 'package:ecom/controller/profile/address_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AddressScreen extends StatelessWidget {
-  const AddressScreen({super.key});
+   AddressScreen({super.key});
+
+  final controller = Get.put(AddressController());
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,6 @@ class AddressScreen extends StatelessWidget {
         child:Stack(
           alignment: Alignment.bottomCenter,
           children: [
-
             Container(
               padding: EdgeInsets.all(20),
               height: 180,
@@ -47,7 +50,9 @@ class AddressScreen extends StatelessWidget {
                       Container(width: 260,
                         height: 60,
                         child:
+                       Obx(() =>  controller.isLoading.value ?
                         TextField(
+                          controller: controller.addressController,
                           cursorColor: primaryColor,
                           decoration: InputDecoration(
                             label: Text('Address'),
@@ -65,14 +70,36 @@ class AddressScreen extends StatelessWidget {
                               borderSide: BorderSide(color: primaryColor),
                             ),
                           ),
-                        ),
+                        ):       TextField(
+                              controller: controller.addressController,
+                              cursorColor: primaryColor,
+                              decoration: InputDecoration(
+                                label: Text('Address'),
+                                labelStyle: TextStyle(color: primaryColor),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: primaryColor),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: primaryColor),
+                                ),
+                              ),
+                            ),
+                      ),
                       ),
 
                     ],),
                   SizedBox(height: 10,),
 
                   SizedBox(height: 15,),
-                  ElevatedButton(onPressed: (){}, child: Text('Update'),
+                  ElevatedButton(onPressed: (){
+                    controller.updateAddress();
+                  }, child: Text('Update'),
                     style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: primaryColor

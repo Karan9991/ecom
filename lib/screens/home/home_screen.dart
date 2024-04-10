@@ -1,6 +1,7 @@
 import 'package:ecom/controller/home_controller.dart';
 import 'package:ecom/data/fetchData.dart';
 import 'package:ecom/model/product_%20model.dart';
+import 'package:ecom/screens/favourite/favourite_screen.dart';
 import 'package:ecom/screens/home/cart.dart';
 import 'package:ecom/screens/home/home.dart';
 import 'package:ecom/screens/profile/profile_tab.dart';
@@ -139,10 +140,10 @@ class _HomeScreenState extends State<HomeScreen> {
               selected = index;
             });
           },
-          children: const [
+          children:  [
             Home(),
             Center(child: Text('Style')),
-            Center(child: Text('Starr')),
+            Favourite(),
             ProfileTab(),
           ],
         ),

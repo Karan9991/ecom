@@ -1,17 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom/controller/profile/profileTab_controller.dart';
+import 'package:ecom/data/fetchData.dart';
+import 'package:ecom/model/user_model.dart';
 import 'package:ecom/screens/profile/address_screen.dart';
 import 'package:ecom/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfileTab extends StatelessWidget {
+class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
 
   @override
+  State<ProfileTab> createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab> {
+
+  final controller = Get.put(ProfileTabController());
+  String? email;
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+
     final primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
-      //backgroundColor: Theme.of(context).primaryColor,
-
       body: Column(children: [
         Container(
           decoration: BoxDecoration(
@@ -38,10 +59,10 @@ class ProfileTab extends StatelessWidget {
               Expanded(child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Karan74406@gmail.com ',
+                 Obx(() => Text(controller.isLoading.value ? '' : controller.email.value,
                   style: TextStyle(color: Colors.white, fontSize: 18,
                   fontWeight: FontWeight.bold
-                  ),),
+                  ),),),
                   Text('March 11, 2024', style: TextStyle(color: Colors.white),),
                 ],
               ))
@@ -231,6 +252,15 @@ class ProfileTab extends StatelessWidget {
                     )
                   ],
                 ),
+                SizedBox(height: 10,),
+                ElevatedButton(onPressed: (){
+                  controller.logout();
+                }, child: Text('Logout'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: primaryColor
+                ),
+                )
 
               ],
             ),

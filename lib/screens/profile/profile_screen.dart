@@ -1,13 +1,20 @@
+import 'package:ecom/controller/profile/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+   ProfileScreen({super.key});
+
+  final controller = Get.put(ProfileController());
+  TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme
         .of(context)
         .primaryColor;
+
+   // controller.isLoading.value ? '' : textEditingController.text = controller.email.value;
     return Scaffold(
       appBar: AppBar(title: Text('Profile',
       style: TextStyle(color: primaryColor),),),
@@ -39,6 +46,7 @@ class ProfileScreen extends StatelessWidget {
              Row(
                mainAxisAlignment: MainAxisAlignment.start,
                children: [
+
                   Text('Name ', style: TextStyle(
                     fontSize: 18,
                     color: primaryColor,
@@ -49,7 +57,27 @@ class ProfileScreen extends StatelessWidget {
                   Container(width: 280,
                     height: 60,
                     child:
-                  TextField(
+                    Obx(() => controller.isLoading.value ? TextField(
+                      controller: controller.nameController,
+                      cursorColor: primaryColor,
+                      decoration: InputDecoration(
+                        label: Text('Name'),
+                        labelStyle: TextStyle(color: primaryColor),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(color: primaryColor),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(color: primaryColor),
+                        ),
+                      ),
+                    ) :  TextField(
+                      controller: controller.nameController,
                     cursorColor: primaryColor,
                     decoration: InputDecoration(
                       label: Text('Name'),
@@ -68,6 +96,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                    ),
                       ),
 
                 ],),
@@ -82,7 +111,9 @@ class ProfileScreen extends StatelessWidget {
                   SizedBox(width: 10,),
                   Container(width: 280,
                     child:
-                    TextField(
+                   controller.isLoading.value ? TextField(
+                     enabled: false,
+                     controller: controller.emailController,
                       cursorColor: primaryColor,
                       decoration: InputDecoration(
                         label: Text('Email'),
@@ -100,11 +131,33 @@ class ProfileScreen extends StatelessWidget {
                           borderSide: BorderSide(color: primaryColor),
                         ),
                       ),
-                    ),
+                    ): TextField(
+                     enabled: false,
+                     controller: controller.emailController,
+                     cursorColor: primaryColor,
+                     decoration: InputDecoration(
+                       label: Text('Email'),
+                       labelStyle: TextStyle(color: primaryColor),
+                       border: OutlineInputBorder(
+                         borderSide: BorderSide.none,
+                         borderRadius: BorderRadius.circular(10),
+                       ),
+                       enabledBorder: OutlineInputBorder(
+                         borderRadius: BorderRadius.circular(10),
+                         borderSide: BorderSide(color: primaryColor),
+                       ),
+                       focusedBorder: OutlineInputBorder(
+                         borderRadius: BorderRadius.circular(10),
+                         borderSide: BorderSide(color: primaryColor),
+                       ),
+                     ),
+                   ),
                   ),
                 ],),
               SizedBox(height: 15,),
-              ElevatedButton(onPressed: (){}, child: Text('Update'),
+              ElevatedButton(onPressed: (){
+                controller.updateUser();
+              }, child: Text('Update'),
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: primaryColor
