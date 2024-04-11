@@ -11,6 +11,8 @@ class Favourite extends StatelessWidget {
   Favourite({super.key});
 
   final controller = Get.put(FavouriteController());
+  final productController = Get.put(ProductController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class Favourite extends StatelessWidget {
               crossAxisCount: 2),
           itemCount: controller.products.length,
           itemBuilder: (context, index) {
-            debugPrint('big testing ${controller.products.length}');
+            //debugPrint('big testing ${controller.products.length}');
             return Padding(padding: const EdgeInsets.all(5.0,),
               child: GestureDetector(
                 onTap: () {
@@ -71,6 +73,7 @@ class Favourite extends StatelessWidget {
                             IconButton(onPressed: () {
                               controller.unFavourite(controller.productDocumentId.value[index],
                                   index);
+
                             },
                                 icon:
                              Icon(

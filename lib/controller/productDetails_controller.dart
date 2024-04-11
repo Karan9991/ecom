@@ -82,7 +82,7 @@ class ProductDetailsController extends GetxController{
   }
 
 
-  Future<void> favourite(String productId) async{
+  Future<void> favourite(String productId, Map<String, dynamic> product) async{
     try{
       User? user = FirebaseAuth.instance.currentUser;
       if(user != null){
@@ -94,7 +94,7 @@ class ProductDetailsController extends GetxController{
           favouriteToggle.value = false;
         }else{
           await FirebaseFirestore.instance.collection('users').doc(user.uid)
-              .collection('favourites').doc(productId).set({'productId' : productId});
+              .collection('favourites').doc(productId).set(product);
           favouriteToggle.value = true;
         }
       }

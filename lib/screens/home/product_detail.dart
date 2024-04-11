@@ -174,8 +174,8 @@ class ProductDetailsScreen extends StatelessWidget {
                       IconButton(
                         onPressed: () {
                           productsController.isLoading2.value = true;
-                          controller.favourite(productId);
-                          productsController.setFavouriteToggle(productIndex);
+                          controller.favourite(productId, product);
+                          productsController.setFavouriteToggle();
                           productsController.isLoading2.value = false;
 
                         },

@@ -14,6 +14,7 @@ class ProductController extends GetxController{
   RxList<bool> favouriteToggle = <bool>[].obs;
   var products = <Map<String, dynamic>>[].obs;
   var productDocumentId = <String>[].obs;
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   void onInit() {
@@ -25,8 +26,28 @@ class ProductController extends GetxController{
   Future<void> load() async{
     await fetchProducts();
     await isProductFavourite();
+    await setFavouriteToggleOnDataChanges();
     isLoading.value = false;
   }
+
+  Future<void> setFavouriteToggleOnDataChanges() async{
+    FirebaseFirestore.instance
+        .collection('users').doc(user!.uid).collection('favourites')
+        .snapshots()
+        .listen((snapshot) async {
+      //debugPrint('firebase listen');
+
+
+      await setFavouriteToggle();
+
+      //isLoading.value = false;
+
+      //await printData();
+
+
+    });
+  }
+
 
   Future<void> fetchProducts() async{
     List<Map<String, dynamic>> productsData = [];
@@ -43,7 +64,6 @@ class ProductController extends GetxController{
     products.value = productsData;
   }
 
-
   Future<void> isProductFavourite() async {
     List<String> fav = await FetchData().fetchFavouritesId();
 
@@ -56,12 +76,25 @@ class ProductController extends GetxController{
 
   }
 
-   Future<void> setFavouriteToggle(int index) async {
-    isLoading2.value = true;
-     favouriteToggle[index] = !favouriteToggle[index];
-    isLoading2.value = false;
+   // Future<void> setFavouriteToggle(int index) async {
+   //  isLoading2.value = true;
+   //   favouriteToggle[index] = !favouriteToggle[index];
+   //  isLoading2.value = false;
+   // }
 
-   }
+  Future<void> setFavouriteToggle() async {
+    isLoading2.value = true;
+    favouriteToggle.value.clear();
+    List<String> fav = await FetchData().fetchFavouritesId();
+
+    //debugPrint('isProductFavourite product length ${products.length}');
+
+    for(int i = 0; i < products.length; i++) {
+      favouriteToggle.add(fav.contains(productDocumentId[i]));
+    }
+    //debugPrint('isProductFavourite ${favouriteToggle}');;
+    isLoading2.value = false;
+  }
 
   Future<void> favourite(String productId, int productIndex, List<Map<String, dynamic>> products) async{
     isLoading2.value = true;
@@ -75,8 +108,6 @@ class ProductController extends GetxController{
           await favouriteDoc.reference.delete();
           favouriteToggle.value[productIndex] = false;
         }else{
-          // await FirebaseFirestore.instance.collection('users').doc(user.uid)
-          //     .collection('favourites').doc(productId).set({'productId' : productId});
           await FirebaseFirestore.instance.collection('users').doc(user.uid)
               .collection('favourites').doc(productId).set(products[productIndex]);
           favouriteToggle.value[productIndex] = true;

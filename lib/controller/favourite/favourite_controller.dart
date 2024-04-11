@@ -17,14 +17,13 @@ class FavouriteController extends GetxController{
 
     super.onInit();
 
-    debugPrint('on init called');
-
+   // debugPrint('on init called');
     load();
 
   }
 
   Future<void> load() async{
-    debugPrint('load called');
+   // debugPrint('load called');
 
     // Listen to changes in the Firestore database
     isLoading.value = true;
@@ -39,10 +38,9 @@ class FavouriteController extends GetxController{
 
       await favouriteList();
 
-
       //isLoading.value = false;
 
-      await printData();
+      //await printData();
 
 
     });
@@ -66,56 +64,13 @@ class FavouriteController extends GetxController{
 
   }
 
-  // Future<void> favouriteList() async{
-  //   debugPrint('favouriteList called');
-  //
-  //   try{
-  //    // isLoading.value = true;
-  //     productDocumentId.value = await FetchData().fetchFavouritesId();
-  //
-  //   final categories = await FirebaseFirestore.instance.collection('categories').get();
-  //   for(final cat in categories.docs){
-  //     final prod = await cat.reference.collection('products').get();
-  //
-  //
-  //     for(final productss in prod.docs){
-  //       if(productDocumentId.value.contains(productss.id))
-  //         {
-  //           products.value.add(productss.data());
-  //         }
-  //     }
-  //   }
-  //
-  //   }catch(e){
-  //    // isLoading.value = false;
-  //     debugPrint('Error favouriteList $e');
-  //   }finally{
-  //   //  isLoading.value = false;
-  //     isLoading.value = false;
-  //
-  //   }
-  // }
-
   Future<void> favouriteList() async{
-    debugPrint('favouriteList called');
+    //debugPrint('favouriteList called');
 
     try{
        productDocumentId.value = await FetchData().fetchFavouritesId();
 
       products.value = await FetchData().fetchFavourites();
-
-      // final categories = await FirebaseFirestore.instance.collection('categories').get();
-      // for(final cat in categories.docs){
-      //   final prod = await cat.reference.collection('products').get();
-      //
-      //
-      //   for(final productss in prod.docs){
-      //     if(productDocumentId.value.contains(productss.id))
-      //     {
-      //       products.value.add(productss.data());
-      //     }
-      //   }
-      // }
 
     }catch(e){
       debugPrint('Error favouriteList $e');
@@ -126,9 +81,9 @@ class FavouriteController extends GetxController{
   }
 
   Future<void> unFavourite(String productId, int index) async{
-    debugPrint('unFavourite called');
-    debugPrint('productId $productId');
-    debugPrint('index $index');
+    // debugPrint('unFavourite called');
+    // debugPrint('productId $productId');
+    // debugPrint('index $index');
 
     try{
       isLoading.value = true;
@@ -139,7 +94,7 @@ class FavouriteController extends GetxController{
         if(ref.exists){
           await ref.reference.delete();
           // productDocumentId.value.removeAt(index);
-          printData2();
+         // printData2();
           //await favouriteList();
         }
       }
