@@ -17,7 +17,7 @@ class Favourite extends StatelessWidget {
     return SingleChildScrollView(
       child:
       Obx(() =>
-      controller.isLoading.value ? const CircularProgressIndicator() : GridView
+      controller.isLoading.value ? const Center(child: CircularProgressIndicator()) : GridView
           .builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

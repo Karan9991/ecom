@@ -45,7 +45,7 @@ class ProductController extends GetxController{
 
 
   Future<void> isProductFavourite() async {
-    List<String> fav = await FetchData().fetchFavourites();
+    List<String> fav = await FetchData().fetchFavouritesId();
 
     //debugPrint('isProductFavourite product length ${products.length}');
 
@@ -63,7 +63,7 @@ class ProductController extends GetxController{
 
    }
 
-  Future<void> favourite(String productId, int productIndex) async{
+  Future<void> favourite(String productId, int productIndex, List<Map<String, dynamic>> products) async{
     isLoading2.value = true;
     try{
       User? user = FirebaseAuth.instance.currentUser;
@@ -75,8 +75,10 @@ class ProductController extends GetxController{
           await favouriteDoc.reference.delete();
           favouriteToggle.value[productIndex] = false;
         }else{
+          // await FirebaseFirestore.instance.collection('users').doc(user.uid)
+          //     .collection('favourites').doc(productId).set({'productId' : productId});
           await FirebaseFirestore.instance.collection('users').doc(user.uid)
-              .collection('favourites').doc(productId).set({'productId' : productId});
+              .collection('favourites').doc(productId).set(products[productIndex]);
           favouriteToggle.value[productIndex] = true;
         }
       }

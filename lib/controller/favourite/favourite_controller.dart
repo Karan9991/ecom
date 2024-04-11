@@ -66,32 +66,60 @@ class FavouriteController extends GetxController{
 
   }
 
+  // Future<void> favouriteList() async{
+  //   debugPrint('favouriteList called');
+  //
+  //   try{
+  //    // isLoading.value = true;
+  //     productDocumentId.value = await FetchData().fetchFavouritesId();
+  //
+  //   final categories = await FirebaseFirestore.instance.collection('categories').get();
+  //   for(final cat in categories.docs){
+  //     final prod = await cat.reference.collection('products').get();
+  //
+  //
+  //     for(final productss in prod.docs){
+  //       if(productDocumentId.value.contains(productss.id))
+  //         {
+  //           products.value.add(productss.data());
+  //         }
+  //     }
+  //   }
+  //
+  //   }catch(e){
+  //    // isLoading.value = false;
+  //     debugPrint('Error favouriteList $e');
+  //   }finally{
+  //   //  isLoading.value = false;
+  //     isLoading.value = false;
+  //
+  //   }
+  // }
 
   Future<void> favouriteList() async{
     debugPrint('favouriteList called');
 
     try{
-     // isLoading.value = true;
-      productDocumentId.value = await FetchData().fetchFavourites();
+       productDocumentId.value = await FetchData().fetchFavouritesId();
 
-    final categories = await FirebaseFirestore.instance.collection('categories').get();
-    for(final cat in categories.docs){
-      final prod = await cat.reference.collection('products').get();
+      products.value = await FetchData().fetchFavourites();
 
-
-      for(final productss in prod.docs){
-        if(productDocumentId.value.contains(productss.id))
-          {
-            products.value.add(productss.data());
-          }
-      }
-    }
+      // final categories = await FirebaseFirestore.instance.collection('categories').get();
+      // for(final cat in categories.docs){
+      //   final prod = await cat.reference.collection('products').get();
+      //
+      //
+      //   for(final productss in prod.docs){
+      //     if(productDocumentId.value.contains(productss.id))
+      //     {
+      //       products.value.add(productss.data());
+      //     }
+      //   }
+      // }
 
     }catch(e){
-     // isLoading.value = false;
       debugPrint('Error favouriteList $e');
     }finally{
-    //  isLoading.value = false;
       isLoading.value = false;
 
     }

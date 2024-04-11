@@ -90,7 +90,7 @@ class FetchData{
     }
   }
 
-  Future<List<String>> fetchFavourites() async{
+  Future<List<String>> fetchFavouritesId() async{
     User? user = firebaseAuth.currentUser;
     List<String> favourites = [];
 
@@ -102,8 +102,31 @@ class FetchData{
         for (QueryDocumentSnapshot queryDocumentSnapshot in favouritesSnapshot.docs) {
           final data = queryDocumentSnapshot.data() as Map
           <String, dynamic>;
-          favourites.add(data['productId']);
+          favourites.add(queryDocumentSnapshot.id);
           debugPrint('Favourites ${data['productId']}');
+        }
+      }
+      return favourites;
+    }catch (e){
+      debugPrint('Error fetching favourites $e');
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchFavourites() async{
+    User? user = firebaseAuth.currentUser;
+    List<Map<String, dynamic>> favourites = [];
+
+    try {
+      if (user != null) {
+        QuerySnapshot<Map<String, dynamic>> favouritesSnapshot = await firestore
+            .collection(
+            'users').doc(user.uid).collection('favourites').get();
+        for (QueryDocumentSnapshot queryDocumentSnapshot in favouritesSnapshot.docs) {
+          final data = queryDocumentSnapshot.data() as Map
+          <String, dynamic>;
+          favourites.add(data);
+          debugPrint('Favourites ${data}');
         }
       }
       return favourites;

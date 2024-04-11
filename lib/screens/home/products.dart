@@ -68,7 +68,7 @@ class _ProductsState extends State<Products> {
 
                               IconButton(onPressed: (){
                                 controller.favourite(controller.productDocumentId[index],
-                                    index);
+                                    index, controller.products.value);
                               },
                                 icon: Obx(() => controller.isLoading2.value ?  Icon(
                                   controller.favouriteToggle.value[index] ? Icons.favorite :
